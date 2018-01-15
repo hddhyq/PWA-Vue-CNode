@@ -17,3 +17,11 @@ export function getTab(tab) {
     return Promise.resolve(res.data)
   })
 }
+
+export function getTopicDetail(id) {
+  const url = URL + '/topic/' + id
+
+  return axios.get(url).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}

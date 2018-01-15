@@ -1,100 +1,109 @@
 <template>
-  <div>
+  <div class="list-view">
     <v-list two-line>
       <div v-for="item in postList" :key="item.id">
-        <v-list-tile avatar ripple >
-          <v-list-tile-avatar tile>
-            <img :src="item.avatar">
-          </v-list-tile-avatar>
-          <v-list-tile-content class="content">
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            <v-list-tile-sub-title>
-              <span>{{item.tab}}</span>
-              <span class="reply-text">{{item.replyCount}}</span>/<span>{{item.visitCount}}</span>
-            </v-list-tile-sub-title>
-          </v-list-tile-content>
-          <v-list-tile-action>
-            <v-list-tile-action-text class="time-text">{{ item.lastReply | formatTime }}</v-list-tile-action-text>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-divider></v-divider>
+        <router-link :to="{name:'topic',params:{id:item.id}}">
+          <v-list-tile avatar ripple>
+            <v-list-tile-avatar tile>
+              <img :src="item.avatar">
+            </v-list-tile-avatar>
+            <v-list-tile-content class="content">
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+              <v-list-tile-sub-title>
+                <span class="tabTopic" :class="chooseTabInfo(item.tab, item.good, item.top, true)" v-text="chooseTabInfo(item.tab, item.good, item.top, false)"></span>
+                <span class="reply-text">{{item.replyCount}}</span>/
+                <span>{{item.visitCount}}</span>
+              </v-list-tile-sub-title>
+            </v-list-tile-content>
+            <v-list-tile-action>
+              <v-list-tile-action-text class="time-text">{{ item.lastReply | formatTime }}</v-list-tile-action-text>
+            </v-list-tile-action>
+          </v-list-tile>
+          <v-divider></v-divider>
+        </router-link>
       </div>
     </v-list>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import {
-    getTab
-  } from '@/api/index'
-  import {
-    mapGetters
-  } from 'vuex'
-  import {timeFromNow} from '@/common/js/utils'
-
-  export default {
-    name: 'ListView',
-    created() {
-      this.getTabData(this.tab)
-    },
-    data() {
-      return {
-        postList: []
-      }
-    },
-    filters: {
-      formatTime(time) {
-        let Time = timeFromNow(time)
-        return Time
-      }
-    },
-    methods: {
-      getTabData(tab) {
-        getTab(tab).then((res) => {
-          if (res.success) {
-            this.postList = this.$_normalizePosts(res.data)
-          }
-          console.log(this.postList)
-        })
-      },
-      $_normalizePosts(list) {
-        let ret = []
-        list.forEach((item) => {
-          ret.push({
-            avatar: item.author.avatar_url,
-            title: item.title,
-            top: item.top,
-            tab: item.tab,
-            replyCount: item.reply_count,
-            visitCount: item.visit_count,
-            lastReply: item.last_reply_at,
-            id: item.id
-          })
-        })
-        return ret
-      }
-    },
-    computed: {
-      ...mapGetters([
-        'tab'
-      ])
-    },
-    watch: {
-      '$route' (to, from) {
-        this.postList = []
-        this.getTabData(this.tab)
-      }
+import { getTab } from '@/api/index'
+import { timeFromNow, getTabInfo } from '@/common/js/utils'
+export default {
+  name: 'ListView',
+  created() {
+    this.getTabData(this.$route.query.tab) // 获取路由的query 来刷新页面
+  },
+  data() {
+    return {
+      postList: []
     }
+  },
+  filters: {
+    formatTime(time) {
+      let Time = timeFromNow(time)
+      return Time
+    }
+  },
+  methods: {
+    getTabData(tab) {
+      getTab(tab).then(res => {
+        if (res.success) {
+          this.postList = this.$_normalizePosts(res.data)
+        }
+        // console.log(this.postList)
+      })
+    },
+    chooseTabInfo(tab, good, top, isClass) {
+      return getTabInfo(tab, good, top, isClass)
+    },
+    getTopicDetail(id) {
+      this.$router.push({
+        path: `/topic/${id}`
+      })
+    },
+    $_normalizePosts(list) {
+      let ret = []
+      list.forEach(item => {
+        ret.push({
+          avatar: item.author.avatar_url,
+          title: item.title,
+          top: item.top,
+          good: item.good,
+          tab: item.tab,
+          replyCount: item.reply_count,
+          visitCount: item.visit_count,
+          lastReply: item.last_reply_at,
+          id: item.id
+        })
+      })
+      return ret
+    }
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.postList = []
+    this.getTabData(to.query.tab)
+    next()
   }
+}
 </script>
 
 <style lang="stylus" scoped>
 .content
   text-overflow: ellipsis
-
+  .tabTopic
+    display: inline-block
+    font-size: 12px
+    padding: 0 4px
+    border-radius: 2px
+    color: #eee
+    background-color: darkgrey
+    &.top
+      background-color: royalblue
+    &.good
+      background-color: rgb(100, 149, 237)
 .reply-text
-  color: #414184
-
+  color: #6495ed
 .time-text
   color: #666
 </style>

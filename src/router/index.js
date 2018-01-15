@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import ListView from '@/components/ListView'
+import TopicDetail from '@/components/TopicDetail'
 
 Vue.use(Router)
 
@@ -9,19 +10,17 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/tab/all'
+      redirect: '/list'
     },
     {
-      path: '/tab',
-      name: 'tab',
-      component: ListView,
-      children: [
-        {
-          path: ':tabType',
-          name: 'tabDetail',
-          component: ListView
-        }
-      ]
+      path: '/list',
+      name: 'list',
+      component: ListView
+    },
+    {
+      path: '/topic/:id',
+      name: 'topic',
+      component: TopicDetail
     }
   ]
 })

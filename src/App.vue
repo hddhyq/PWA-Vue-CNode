@@ -51,91 +51,104 @@
       </v-toolbar>
       <!-- 内容路由区 -->
       <v-content>
-        <router-view>
-          <v-container fluid></v-container>
-        </router-view>
+        <keep-alive>
+          <router-view>
+            <v-container fluid></v-container>
+          </router-view>
+        </keep-alive>
       </v-content>
     </v-app>
   </div>
 </template>
 
 <script>
-  import {mapMutations} from 'vuex'
-  export default {
-    name: 'app',
-    data() {
-      return {
-        drawer: false,
-        login: false,
-        tabs: [{
-            name: '全部',
-            tab: 'all',
-            active: true
-          },
-          {
-            name: '精华',
-            tab: 'good',
-            active: false
-          },
-          {
-            name: '分享',
-            tab: 'share',
-            active: false
-          },
-          {
-            name: '问答',
-            tab: 'ask',
-            active: false
-          },
-          {
-            name: '招聘',
-            tab: 'job',
-            active: false
-          }
-        ],
-        sidebars: [{
-            title: '个人中心',
-            icon: 'account_circle'
-          },
-          {
-            title: '我的收藏',
-            icon: 'stars'
-          },
-          {
-            title: '我的消息',
-            icon: 'message'
-          },
-          {
-            title: '关于',
-            icon: 'info'
-          }
-        ],
-        tabName: '全部'
-      }
-    },
-    methods: {
-      selectTab(item) {
-        this.tabs.map(i => {
-          i.active = false
-          if (i.name === item.name) {
-            i.active = true
-          }
-        }) // 单选效果
-        this.tabName = item.name
-        // 路由
-        let tabType = item.tab
-        console.log(tabType)
-        this.setTab(tabType)
-        this.$router.push({
-          path: `/tab/${tabType}`
-        })
-      },
-      selectPage(item) {},
-      ...mapMutations({
-        setTab: 'SET_TAB'
+import { mapMutations } from 'vuex'
+import { chooseTabName } from '@/common/js/tab'
+
+export default {
+  name: 'app',
+  data() {
+    return {
+      drawer: false,
+      login: false,
+      tabs: [
+        {
+          name: '全部',
+          tab: 'all',
+          active: true
+        },
+        {
+          name: '精华',
+          tab: 'good',
+          active: false
+        },
+        {
+          name: '分享',
+          tab: 'share',
+          active: false
+        },
+        {
+          name: '问答',
+          tab: 'ask',
+          active: false
+        },
+        {
+          name: '招聘',
+          tab: 'job',
+          active: false
+        }
+      ],
+      sidebars: [
+        {
+          title: '个人中心',
+          icon: 'account_circle'
+        },
+        {
+          title: '我的收藏',
+          icon: 'stars'
+        },
+        {
+          title: '我的消息',
+          icon: 'message'
+        },
+        {
+          title: '关于',
+          icon: 'info'
+        }
+      ]
+    }
+  },
+  methods: {
+    selectTab(item) {
+      this.tabs.map(i => {
+        i.active = false
+        if (i.name === item.name) {
+          i.active = true
+        }
+      }) // 单选效果
+      // 路由
+      // let tabType = item.tab
+      // console.log(tabType)
+      this.setTab(item.tab)
+      this.$router.push({
+        path: '/list',
+        query: {
+          tab: item.tab
+        }
       })
+    },
+    selectPage(item) {},
+    ...mapMutations({
+      setTab: 'SET_TAB'
+    })
+  },
+  computed: {
+    tabName() {
+      let name = chooseTabName(this.$route.query.tab)
+      return name
     }
   }
+}
 </script>
 
 <style lang="stylus">
@@ -149,7 +162,4 @@
   height: 100%
   .text
     margin: 10px auto
-
-// .tab_list_action
-
 </style>
