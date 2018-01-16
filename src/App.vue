@@ -63,7 +63,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
-import { chooseTabName } from '@/common/js/tab'
+import { chooseTabName } from '@/common/js/utils'
 
 export default {
   name: 'app',

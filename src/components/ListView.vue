@@ -10,9 +10,10 @@
             <v-list-tile-content class="content">
               <v-list-tile-title>{{ item.title }}</v-list-tile-title>
               <v-list-tile-sub-title>
-                <span class="tabTopic" :class="chooseTabInfo(item.tab, item.good, item.top, true)" v-text="chooseTabInfo(item.tab, item.good, item.top, false)"></span>
-                <span class="reply-text">{{item.replyCount}}</span>/
-                <span>{{item.visitCount}}</span>
+                <span>
+                  <topic-text :topicTab="item"></topic-text>
+                </span>
+                <span class="reply-text">{{item.replyCount}}</span>/<span>{{item.visitCount}}</span>
               </v-list-tile-sub-title>
             </v-list-tile-content>
             <v-list-tile-action>
@@ -28,7 +29,8 @@
 
 <script type="text/ecmascript-6">
 import { getTab } from '@/api/index'
-import { timeFromNow, getTabInfo } from '@/common/js/utils'
+import { timeFromNow } from '@/common/js/utils'
+import TopicText from '@/base/TopicText'
 export default {
   name: 'ListView',
   created() {
@@ -54,9 +56,6 @@ export default {
         // console.log(this.postList)
       })
     },
-    chooseTabInfo(tab, good, top, isClass) {
-      return getTabInfo(tab, good, top, isClass)
-    },
     getTopicDetail(id) {
       this.$router.push({
         path: `/topic/${id}`
@@ -80,6 +79,9 @@ export default {
       return ret
     }
   },
+  components: {
+    TopicText
+  },
   beforeRouteUpdate(to, from, next) {
     this.postList = []
     this.getTabData(to.query.tab)
@@ -93,15 +95,6 @@ export default {
   text-overflow: ellipsis
   .tabTopic
     display: inline-block
-    font-size: 12px
-    padding: 0 4px
-    border-radius: 2px
-    color: #eee
-    background-color: darkgrey
-    &.top
-      background-color: royalblue
-    &.good
-      background-color: rgb(100, 149, 237)
 .reply-text
   color: #6495ed
 .time-text
