@@ -5,10 +5,11 @@ import Vuetify from 'vuetify'
 import App from './App'
 import store from './store'
 import router from './router'
+import FastClick from 'fastclick'
 import '@/common/stylus/index.styl'
 
 Vue.use(Vuetify) // 使用Vuetify,stylus使用方法：@import '~vuetify/src/stylus/main'
-
+FastClick.attach(document.body)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

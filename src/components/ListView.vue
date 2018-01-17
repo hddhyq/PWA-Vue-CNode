@@ -11,8 +11,8 @@
               <v-list-tile-title>{{ item.title }}</v-list-tile-title>
               <v-list-tile-sub-title>
                 <span>
-                  <topic-text :topicTab="item"></topic-text>
-                </span>
+                      <topic-text :topicTab="item"></topic-text>
+                    </span>
                 <span class="reply-text">{{item.replyCount}}</span>/<span>{{item.visitCount}}</span>
               </v-list-tile-sub-title>
             </v-list-tile-content>

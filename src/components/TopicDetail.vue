@@ -1,5 +1,7 @@
 <template>
+<transition name="slide">
   <div class="topic-detail">
+    <v-toolbar dense fixed color="primary" dark></v-toolbar>
     <div class="topic-title">{{topic.title}}</div>
     <div class="author">
       <div class="author-info">
@@ -33,7 +35,9 @@
       <reply-list :replies="topic.replies"></reply-list>
     </div>
   </div>
+</transition>
 </template>
+
 <script type="text/ecmascript-6">
 import { getTopicDetail } from '@/api/index'
 import { timeFromNow, chooseTabName } from '@/common/js/utils'
@@ -105,7 +109,6 @@ export default {
           isAuthor: data.author.loginname === item.author.loginname
         })
       })
-
       return ret
     },
     ...mapMutations({
@@ -132,8 +135,16 @@ export default {
   }
 }
 </script>
+
 <style lang="stylus" scoped>
 .topic-detail
+  position: absolute
+  background: #fff
+  top: 48px
+  right: 0
+  bottom: 0
+  left: 0
+  z-index: 100
   .topic-title
     padding: 5px
     margin: 15px
@@ -176,4 +187,10 @@ export default {
     padding: 15px;
   }
 }
+
+.slide-enter-active, .slide-leave-active
+    transition: all 1s
+
+.slide-enter, .slide-leave-to
+  transform: translate3d(100%, 0, 0)
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="reply-list-container">
     <div class="reply-count">
-      <div class="text">全部评论 (86)</div>
+      <div class="text">全部评论 ({{replies.length}})</div>
     </div>
     <v-divider></v-divider>
     <div class="reply-list" v-for="(item, index) in replies" :key="item.id">
@@ -23,8 +23,9 @@
           </div>
           <div class="ups">
             <span class="ups-number">({{item.upsNumber}})</span>
-            <v-icon>thumb_up</v-icon>
+            <v-icon color="grey lighten-2">thumb_up</v-icon>
             <v-icon v-show="false">thumb_up</v-icon>
+            <v-icon large color="grey lighten-2">reply</v-icon>
           </div>
         </div>
         <div class="markdown-body" v-html="item.content"></div>
@@ -68,7 +69,7 @@ export default {
       margin-right: 5px
     .reply-header-content
       width: 100%
-      max-width: calc(100% - 36px) // 避免markdown超出屏幕边界
+      max-width: calc(100% - 41px) // 避免markdown超出屏幕边界
       .reply-title
         display: flex
         justify-content: space-between
@@ -78,6 +79,7 @@ export default {
         .ups
           margin-right: 5px
           .ups-number
+            color: #BDBDBD
             line-height: 2
 
 .markdown-body

@@ -2,11 +2,11 @@ import axios from 'axios'
 
 const URL = 'https://cnodejs.org/api/v1'
 
-export function getTab(tab) {
+export function getTab(tab, page) {
   const url = URL + '/topics'
 
   const data = {
-    page: 1,
+    page: page || 1,
     tab: tab,
     limit: 20
   }
