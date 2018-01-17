@@ -30,7 +30,7 @@
     <div v-html="topic.content" class="markdown-body"></div>
     <v-divider></v-divider>
     <div>
-      <reply-list :replies="a"></reply-list>
+      <reply-list :replies="topic.replies"></reply-list>
     </div>
   </div>
 </template>
@@ -49,8 +49,7 @@ export default {
   },
   data() {
     return {
-      topic: {},
-      a: []
+      topic: {}
     }
   },
   filters: {
@@ -87,9 +86,26 @@ export default {
           visitCount: data.visit_count,
           isCollect: data.is_collect,
           createTime: data.create_at,
-          replies: data.replies
+          replies: this.$_normalizereplies(data) || []
         }
       )
+      return ret
+    },
+    $_normalizereplies(data) {
+      let ret = []
+      data.replies.forEach(item => {
+        ret.push({
+          authorName: item.author.loginname,
+          avatar: item.author.avatar_url,
+          id: item.id,
+          isUped: item.is_uped,
+          upsNumber: item.ups.length,
+          createdTime: item.create_at,
+          content: item.content,
+          isAuthor: data.author.loginname === item.author.loginname
+        })
+      })
+
       return ret
     },
     ...mapMutations({
