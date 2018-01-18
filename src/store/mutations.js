@@ -6,6 +6,9 @@ const mutations = {
   },
   [types.SET_TOPIC_ID](state, topicId) {
     state.topicId = topicId
+  },
+  [types.SET_DRAWER](state, drawer) {
+    state.drawer = drawer
   }
 }
 

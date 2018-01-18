@@ -1,6 +1,7 @@
 const state = {
   userInfo: '',
-  topicId: ''
+  topicId: '',
+  drawer: false
 }
 
 export default state

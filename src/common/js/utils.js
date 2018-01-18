@@ -86,7 +86,7 @@ export function chooseTabName(tab) {
       tabName = '分享'
       break
     case 'all':
-      tabName = '全部'
+      tabName = 'CNode社区'
       break
     case 'good':
       tabName = '精华'
@@ -98,7 +98,7 @@ export function chooseTabName(tab) {
       tabName = '招聘'
       break
     default:
-      tabName = '全部'
+      tabName = 'CNode社区'
   }
 
   return tabName

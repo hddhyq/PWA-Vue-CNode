@@ -1,7 +1,5 @@
 <template>
-<transition name="slide">
   <div class="topic-detail">
-    <v-toolbar dense fixed color="primary" dark></v-toolbar>
     <div class="topic-title">{{topic.title}}</div>
     <div class="author">
       <div class="author-info">
@@ -35,7 +33,6 @@
       <reply-list :replies="topic.replies"></reply-list>
     </div>
   </div>
-</transition>
 </template>
 
 <script type="text/ecmascript-6">
@@ -72,7 +69,7 @@ export default {
         if (res.success) {
           // console.log(res.data)
           this.topic = this.$_normailzeTopic(res.data)
-          console.log(this.topic)
+          // console.log(this.topic)
         }
       })
     },
@@ -138,13 +135,13 @@ export default {
 
 <style lang="stylus" scoped>
 .topic-detail
-  position: absolute
-  background: #fff
-  top: 48px
-  right: 0
-  bottom: 0
-  left: 0
-  z-index: 100
+  // position: absolute
+  // background: #fff
+  // top: 48px
+  // right: 0
+  // bottom: 0
+  // left: 0
+  // z-index: 100
   .topic-title
     padding: 5px
     margin: 15px
@@ -188,9 +185,9 @@ export default {
   }
 }
 
-.slide-enter-active, .slide-leave-active
-    transition: all 1s
+// .slide-enter-active, .slide-leave-active
+//     transition: all 1s
 
-.slide-enter, .slide-leave-to
-  transform: translate3d(100%, 0, 0)
+// .slide-enter, .slide-leave-to
+//   transform: translate3d(100%, 0, 0)
 </style>

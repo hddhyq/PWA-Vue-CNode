@@ -1,30 +1,24 @@
 <template>
-  <div class="list-view">
-    <v-list two-line>
-      <div v-for="item in postList" :key="item.id">
-        <router-link :to="{name:'topic',params:{id:item.id}}">
-          <v-list-tile avatar ripple>
-            <v-list-tile-avatar tile>
-              <img :src="item.avatar">
-            </v-list-tile-avatar>
-            <v-list-tile-content class="content">
-              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-              <v-list-tile-sub-title>
-                <span>
-                      <topic-text :topicTab="item"></topic-text>
-                    </span>
-                <span class="reply-text">{{item.replyCount}}</span>/<span>{{item.visitCount}}</span>
-              </v-list-tile-sub-title>
-            </v-list-tile-content>
-            <v-list-tile-action>
-              <v-list-tile-action-text class="time-text">{{ item.lastReply | formatTime }}</v-list-tile-action-text>
-            </v-list-tile-action>
-          </v-list-tile>
-          <v-divider></v-divider>
-        </router-link>
-      </div>
-    </v-list>
-  </div>
+  <v-list two-line>
+      <template v-for="(item, index) in postList">
+        <v-list-tile avatar ripple :key="item.id" @click="toTopic(item)">
+          <v-list-tile-avatar tile class="list-avatar">
+            <img v-lazy="item.avatar">
+          </v-list-tile-avatar>
+          <v-list-tile-content class="content">
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            <v-list-tile-sub-title>
+              <span><topic-text :topicTab="item"></topic-text></span>
+              <span class="reply-text">{{item.replyCount}}</span>/<span>{{item.visitCount}}</span>
+            </v-list-tile-sub-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-list-tile-action-text class="time-text">{{ item.lastReply | formatTime }}</v-list-tile-action-text>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-divider v-if="index + 1 < postList.length" :key="index"></v-divider>
+    </template>
+  </v-list>
 </template>
 
 <script type="text/ecmascript-6">
@@ -48,12 +42,20 @@ export default {
     }
   },
   methods: {
+    showMore() {},
+    toTopic(item) {
+      this.$router.push({
+        name: 'topic',
+        params: {
+          id: item.id
+        }
+      })
+    },
     getTabData(tab) {
       getTab(tab).then(res => {
         if (res.success) {
           this.postList = this.$_normalizePosts(res.data)
         }
-        // console.log(this.postList)
       })
     },
     getTopicDetail(id) {
@@ -91,6 +93,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.list-avatar
+  margin-top: 10px
 .content
   text-overflow: ellipsis
   .tabTopic

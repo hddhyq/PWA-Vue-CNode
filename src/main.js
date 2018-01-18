@@ -7,9 +7,13 @@ import store from './store'
 import router from './router'
 import FastClick from 'fastclick'
 import '@/common/stylus/index.styl'
+import VueLazyload from 'vue-lazyload'
 
 Vue.use(Vuetify) // 使用Vuetify,stylus使用方法：@import '~vuetify/src/stylus/main'
 FastClick.attach(document.body)
+Vue.use(VueLazyload, {
+  loading: require('@/common/image/default.jpg')
+})
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
