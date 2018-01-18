@@ -10,13 +10,20 @@
         <v-toolbar-title>{{tabName}}</v-toolbar-title>
       </v-toolbar>
       <!-- 内容路由区 -->
-      <v-content>
+      <!-- <v-content> -->
+      <div class="view-container">
         <keep-alive>
+          <router-view>
+            <!-- <v-container fluid></v-container> -->
+          </router-view>
+        </keep-alive>
+      </div>
+        <!-- <keep-alive>
           <router-view>
             <v-container fluid></v-container>
           </router-view>
-        </keep-alive>
-      </v-content>
+        </keep-alive> -->
+      <!-- </v-content> -->
     </v-app>
   </div>
 </template>
@@ -48,4 +55,11 @@ export default {
 
 <style lang="stylus">
 @import '~vuetify/src/stylus/main'
+
+.view-container
+  position: relative
+  margin-top: 48px
+  height: 100%
+  width: 100%
+  // overflow: hidden
 </style>

@@ -6,7 +6,7 @@
         <div class="author-info-left">
           <div class="author-avatar">
             <v-avatar>
-              <img :src="topic.avatar">
+              <img v-lazy="topic.avatar">
             </v-avatar>
           </div>
           <div class="author-title">

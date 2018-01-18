@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
+    "@types/better-scroll": "^1.5.0",
     "axios": "^0.17.1",
+    "better-scroll": "^1.8.0",
     "fastclick": "^1.0.6",
     "timeago.js": "^3.0.2",
     "vue": "^2.5.2",

@@ -1,30 +1,37 @@
 <template>
+<scroll class="list-view" ref="scroll" :data="postList">
   <v-list two-line>
-      <template v-for="(item, index) in postList">
-        <v-list-tile avatar ripple :key="item.id" @click="toTopic(item)">
-          <v-list-tile-avatar tile class="list-avatar">
-            <img v-lazy="item.avatar">
-          </v-list-tile-avatar>
-          <v-list-tile-content class="content">
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-            <v-list-tile-sub-title>
-              <span><topic-text :topicTab="item"></topic-text></span>
-              <span class="reply-text">{{item.replyCount}}</span>/<span>{{item.visitCount}}</span>
-            </v-list-tile-sub-title>
-          </v-list-tile-content>
-          <v-list-tile-action>
-            <v-list-tile-action-text class="time-text">{{ item.lastReply | formatTime }}</v-list-tile-action-text>
-          </v-list-tile-action>
-        </v-list-tile>
-        <v-divider v-if="index + 1 < postList.length" :key="index"></v-divider>
+    <template v-for="(item, index) in postList">
+      <v-list-tile avatar ripple :key="item.id" @click="toTopic(item)">
+        <v-list-tile-avatar tile class="list-avatar">
+          <img v-lazy="item.avatar">
+        </v-list-tile-avatar>
+        <v-list-tile-content class="content">
+          <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+          <v-list-tile-sub-title>
+            <span><topic-text :topicTab="item"></topic-text></span>
+            <span class="reply-text">{{item.replyCount}}</span>/<span>{{item.visitCount}}</span>
+          </v-list-tile-sub-title>
+        </v-list-tile-content>
+        <v-list-tile-action>
+          <v-list-tile-action-text class="time-text">{{ item.lastReply | formatTime }}</v-list-tile-action-text>
+        </v-list-tile-action>
+      </v-list-tile>
+      <v-divider v-if="index + 1 < postList.length" :key="index"></v-divider>
     </template>
   </v-list>
+  <v-btn class="blue" dark fixed bottom right fab>
+    <v-icon>keyboard_arrow_up</v-icon>
+  </v-btn>
+</scroll>
 </template>
 
 <script type="text/ecmascript-6">
 import { getTab } from '@/api/index'
 import { timeFromNow } from '@/common/js/utils'
 import TopicText from '@/base/TopicText'
+import Scroll from '@/base/Scroll'
+
 export default {
   name: 'ListView',
   created() {
@@ -82,7 +89,8 @@ export default {
     }
   },
   components: {
-    TopicText
+    TopicText,
+    Scroll
   },
   beforeRouteUpdate(to, from, next) {
     this.postList = []
@@ -93,6 +101,11 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.list-view
+  position: absolute
+  width: 100%
+  height: 100%
+  overflow: hidden
 .list-avatar
   margin-top: 10px
 .content
