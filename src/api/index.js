@@ -25,3 +25,17 @@ export function getTopicDetail(id) {
     return Promise.resolve(res.data)
   })
 }
+
+export function getLogin(accessToken) {
+  const url = URL + '/accesstoken'
+
+  // const data = {
+  //   accesstoken: accessToken
+  // }
+
+  return axios.post(url, {
+    accesstoken: accessToken
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}

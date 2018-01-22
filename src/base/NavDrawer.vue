@@ -1,18 +1,19 @@
 <template>
   <div class="nav-drawer">
-    <v-card tile fixed flat color="primary" dark height="160px">
-      <v-container v-show="userInfo" class="avatar-container">
+    <v-card tile fixed flat class="nav-card" dark height="150px">
+      <v-container v-show="userInfo.token" class="avatar-container">
         <div>
-          <v-avatar size="80px" class="elevation-5">
-            <img src="https://avatars0.githubusercontent.com/u/24468747?v=4&s=460" alt="">
+          <v-avatar size="70px" class="elevation-5">
+            <img :src="userInfo.avatarUrl">
           </v-avatar>
         </div>
         <div class="text">
-          <span>hddhyqsadfsdf</span>
+          <div>{{userInfo.name}}</div>
+          <div @click.stop="loginOut">注销</div>
         </div>
       </v-container>
-      <v-container v-show="!userInfo" class="avatar-container">
-        <div>
+      <v-container v-show="!userInfo.token" class="avatar-login">
+        <div @click="goLogin">
           <v-btn round color="primary lighten-3" dark>立即登录</v-btn>
         </div>
       </v-container>
@@ -42,7 +43,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'NavDrawer',
   computed: {
@@ -75,6 +76,11 @@ export default {
           title: '招聘',
           tab: 'job',
           icon: 'work'
+        },
+        {
+          title: '测试',
+          tab: 'dev',
+          icon: 'star'
         }
       ],
       personInfo: [
@@ -101,7 +107,17 @@ export default {
           tab: item.tab
         }
       })
-    }
+    },
+    goLogin() {
+      this.$router.push('/login')
+    },
+    loginOut() {
+      this.setUserInfo({})
+      window.localStorage.removeItem('user')
+    },
+    ...mapMutations({
+      setUserInfo: 'SET_USER_INFO'
+    })
   }
 }
 </script>
@@ -109,13 +125,23 @@ export default {
 <style lang="stylus" scoped>
 .nav-drawer
   height: 100%
+  overflow: visible 
+.nav-card
+  background-image: url('../common/image/backImg.jpg')
+  background-size: 100% 100%
 
 .avatar-container
   display: flex
   flex-direction: column
+  height: 100%
+  .text
+    display: flex
+    justify-content: space-between
+    margin-top: 20px
+
+.avatar-login
+  display: flex
   justify-content: center
   align-items: center
   height: 100%
-  .text
-    margin: 10px auto
 </style>

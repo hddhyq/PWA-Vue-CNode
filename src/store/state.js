@@ -1,5 +1,10 @@
+function loadUserInfo() {
+  let user = window.localStorage.getItem('user')
+  return JSON.parse(user)
+}
+
 const state = {
-  userInfo: '',
+  userInfo: loadUserInfo() || {},
   topicId: '',
   drawer: false
 }
