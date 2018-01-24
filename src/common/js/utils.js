@@ -97,6 +97,9 @@ export function chooseTabName(tab) {
     case 'job':
       tabName = '招聘'
       break
+    case 'dev':
+      tabName = '测试'
+      break
     default:
       tabName = 'CNode社区'
   }

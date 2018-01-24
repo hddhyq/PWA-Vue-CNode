@@ -24,11 +24,12 @@
       <loading></loading>
     </div>
     <v-fab-transition>
-      <v-btn color="blue" dark fixed bottom right fab v-show="iconShow" transition="scale" >
+      <v-btn color="blue" dark fixed bottom right fab v-show="iconShow" transition="scale" @click="newReply">
         <v-icon>create</v-icon>
       </v-btn>
     </v-fab-transition>
   </v-list>
+  <login-dialog :dialog="showDialog" @hasClick="hideDialog"></login-dialog>
 </div>
 </template>
 
@@ -37,9 +38,11 @@ import { getTab } from '@/api/index'
 import { timeFromNow } from '@/common/js/utils'
 import TopicText from '@/base/TopicText'
 import Loading from '@/base/Loading/Loading'
+import {loginMixin} from '@/common/js/mixin'
 
 export default {
   name: 'ListView',
+  mixins: [loginMixin],
   created() {
     this.getTabData(this.tab) // 获取路由的query 来刷新页面
   },
@@ -120,6 +123,13 @@ export default {
         this.iconShow = true
       } else if (deltaY < -5) {
         this.iconShow = false
+      }
+    },
+    newReply() {
+      if (this.isLogin) {
+        this.$router.push('/new')
+      } else {
+        this.showDialog = true
       }
     },
     $_normalizePosts(list) {

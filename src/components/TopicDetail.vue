@@ -1,5 +1,7 @@
 <template>
-  <div class="topic-detail">
+  <div class="topic-detail" ref="topic"
+       @touchstart.passive="listTouchStart"
+       @touchmove.passive="listTouchMove">
     <div class="topic-title">{{topic.title}}</div>
     <div class="author">
       <div class="author-info">
@@ -32,16 +34,25 @@
     <div>
       <reply-list :replies="topic.replies"></reply-list>
     </div>
+    <v-fab-transition>
+      <v-btn color="blue" dark fixed bottom right fab v-show="iconShow" transition="scale" @click="replyTopic">
+        <v-icon>reply</v-icon>
+      </v-btn>
+    </v-fab-transition>
+    <login-dialog :dialog="showDialog" @hasClick="hideDialog"></login-dialog>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import { getTopicDetail } from '@/api/index'
+import { getTopicDetail } from '@/api/index' // postReply
 import { timeFromNow, chooseTabName } from '@/common/js/utils'
 import { mapMutations, mapGetters } from 'vuex'
+import {loginMixin} from '@/common/js/mixin'
+// import LoginDialog from '@/base/LoginDialog'
 import ReplyList from '@/base/ReplyList'
 export default {
   name: 'TopicDetail',
+  mixins: [loginMixin],
   created() {
     this.getDetail(this.$route.params.id)
   },
@@ -50,7 +61,10 @@ export default {
   },
   data() {
     return {
-      topic: {}
+      topic: {},
+      iconShow: true,
+      touch: [],
+      content: 'hello'
     }
   },
   filters: {
@@ -67,10 +81,47 @@ export default {
     getDetail(id) {
       getTopicDetail(id).then(res => {
         if (res.success) {
-          // console.log(res.data)
           this.topic = this.$_normailzeTopic(res.data)
-          // console.log(this.topic)
         }
+      })
+    },
+    listTouchStart(e) {
+      const touch = e.touches[0]
+      this.touch.startY = touch.clientY
+    },
+    listTouchMove(e) {
+      const touch = e.touches[0]
+      const deltaY = touch.clientY - this.touch.startY
+      if (deltaY > 5) { // 设置一个阀值
+        this.iconShow = true
+      } else if (deltaY < -5) {
+        this.iconShow = false
+      }
+    },
+    replyPerson() {
+
+    },
+    replyTopic() {
+      if (this.isLogin) {
+        // postReply(this.userInfo.token, this.topic.id, this.content).then((res) => {
+        //   if (res.success) {
+        //     this.pushReply()
+        //   }
+        // })
+        this.pushReply()
+      } else {
+        this.showDialog = true
+      }
+    },
+    pushReply() {
+      let time = new Date()
+      this.topic.replies.push({
+        id: this.userInfo.userId,
+        avatar: this.userInfo.avatarUrl,
+        upsNumber: 0,
+        content: this.content,
+        authorName: this.userInfo.name,
+        createTime: time
       })
     },
     $_normailzeTopic(data) {
@@ -135,13 +186,6 @@ export default {
 
 <style lang="stylus" scoped>
 .topic-detail
-  // position: absolute
-  // background: #fff
-  // top: 48px
-  // right: 0
-  // bottom: 0
-  // left: 0
-  // z-index: 100
   .topic-title
     padding: 5px
     margin: 15px

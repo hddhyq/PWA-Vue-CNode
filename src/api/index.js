@@ -2,6 +2,7 @@ import axios from 'axios'
 
 const URL = 'https://cnodejs.org/api/v1'
 
+// 获取页面listView
 export function getTab(tab, page) {
   const url = URL + '/topics'
 
@@ -18,6 +19,7 @@ export function getTab(tab, page) {
   })
 }
 
+// 获取主题详情
 export function getTopicDetail(id) {
   const url = URL + '/topic/' + id
 
@@ -26,15 +28,24 @@ export function getTopicDetail(id) {
   })
 }
 
+// 登录
 export function getLogin(accessToken) {
   const url = URL + '/accesstoken'
 
-  // const data = {
-  //   accesstoken: accessToken
-  // }
-
   return axios.post(url, {
     accesstoken: accessToken
+  }).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
+
+export function postReply(accessToken, topicId, content, replyId) {
+  const url = URL + '/topic/' + topicId + '/replies'
+
+  return axios.post(url, {
+    accesstoken: accessToken,
+    content: content,
+    reply_id: replyId | ''
   }).then((res) => {
     return Promise.resolve(res.data)
   })

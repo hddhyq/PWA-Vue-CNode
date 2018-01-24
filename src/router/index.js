@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import ListView from '@/components/ListView'
 import TopicDetail from '@/components/TopicDetail'
 import Login from '@/components/Login'
+import NewTopic from '@/components/NewTopic'
 
 Vue.use(Router)
 
@@ -27,6 +28,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/new',
+      name: 'new',
+      component: NewTopic
     }
   ]
 })
