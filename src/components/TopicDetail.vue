@@ -48,11 +48,24 @@
       </v-btn>
     </v-fab-transition>
     <login-dialog :dialog="showDialog" @hasClick="hideDialog"></login-dialog>
+    <v-bottom-sheet v-model="sheet">
+      <div class="btn-wrapper" @click="sendReply">
+        <v-btn color="blue" dark small>发送</v-btn>
+      </div>
+      <v-text-field
+        v-model="content"
+        single-line
+        autofocus
+        box
+        solo
+        hide-details
+      ></v-text-field>
+    </v-bottom-sheet>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import { getTopicDetail, postCollect, postDeCollect } from '@/api/index' // postReply
+import { getTopicDetail, postCollect, postDeCollect, postReply } from '@/api/index' // postReply
 import { timeFromNow, chooseTabName } from '@/common/js/utils'
 import { mapMutations, mapGetters } from 'vuex'
 import { loginMixin } from '@/common/js/mixin'
@@ -72,9 +85,12 @@ export default {
       topic: {},
       iconShow: true,
       touch: [],
-      content: 'hello',
+      content: '',
       alertSucessShow: false,
-      alertErrorShow: false
+      alertErrorShow: false,
+      sheet: false,
+      replyText: '',
+      replyId: ''
     }
   },
   filters: {
@@ -92,7 +108,7 @@ export default {
       getTopicDetail(id).then(res => {
         if (res.success) {
           this.topic = this.$_normailzeTopic(res.data)
-          console.log(this.topic)
+          // console.log(this.topic)
         }
       })
     },
@@ -112,17 +128,18 @@ export default {
         })
       }
     },
-    replyPerson() {
-      console.log('hello')
+    replyPerson(item) {
+      if (this.isLogin) {
+        this.content = `@${item.authorName} `
+        this.replyId = item.id
+        this.sheet = !this.sheet
+      } else {
+        this.showDialog = true
+      }
     },
     replyTopic() {
       if (this.isLogin) {
-        // postReply(this.userInfo.token, this.topic.id, this.content).then((res) => {
-        //   if (res.success) {
-        //     this.pushReply()
-        //   }
-        // })
-        this.sendError()
+        this.sheet = !this.sheet
       } else {
         this.showDialog = true
       }
@@ -137,6 +154,23 @@ export default {
         authorName: this.userInfo.name,
         createTime: time
       })
+    },
+    sendReply() {
+      postReply(this.userInfo.token, this.topic.id, this.content, this.replyId).then((res) => {
+        if (res.success) {
+          this.pushReply()
+          this.hideReply()
+          this.sendSucess()
+        } else {
+          this.sheet = !this.sheet
+          this.sendError()
+        }
+      })
+    },
+    hideReply() {
+      this.sheet = !this.sheet
+      this.content = ''
+      this.replyId = ''
     },
     sendSucess() {
       this.alertSucessShow = true
@@ -257,6 +291,9 @@ export default {
           font-size: 10px
           color: #666
 
+.btn-wrapper
+  display: flex
+  flex-direction: row-reverse
 .alert
   position: fixed
   top: 40px
