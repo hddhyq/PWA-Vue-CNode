@@ -1,7 +1,15 @@
 <template>
-  <div class="topic-detail" ref="topic"
-       @touchstart.passive="listTouchStart"
-       @touchmove.passive="listTouchMove">
+  <div class="topic-detail" ref="topic" @touchstart.passive="listTouchStart" @touchmove.passive="listTouchMove">
+    <div v-show="alertSucessShow" class="alert">
+      <v-alert color="success" icon="check_circle" :value="true">
+        发送成功!
+      </v-alert>
+    </div>
+    <div v-show="alertErrorShow" class="alert">
+      <v-alert color="error" icon="warning" :value="true">
+        发送失败！
+      </v-alert>
+    </div>
     <div class="topic-title">{{topic.title}}</div>
     <div class="author">
       <div class="author-info">
@@ -20,7 +28,7 @@
           </div>
         </div>
         <div class="author-info-right">
-          <div>
+          <div @click="postIsCollect">
             <v-icon large color="yellow lighten-1" v-if="topic.isCollect">star</v-icon>
             <v-icon large color="grey lighten-1" v-else>star_border</v-icon>
           </div>
@@ -32,7 +40,7 @@
     <div v-html="topic.content" class="markdown-body"></div>
     <v-divider></v-divider>
     <div>
-      <reply-list :replies="topic.replies"></reply-list>
+      <reply-list :replies="topic.replies" @reply="replyPerson"></reply-list>
     </div>
     <v-fab-transition>
       <v-btn color="blue" dark fixed bottom right fab v-show="iconShow" transition="scale" @click="replyTopic">
@@ -44,10 +52,10 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { getTopicDetail } from '@/api/index' // postReply
+import { getTopicDetail, postCollect, postDeCollect } from '@/api/index' // postReply
 import { timeFromNow, chooseTabName } from '@/common/js/utils'
 import { mapMutations, mapGetters } from 'vuex'
-import {loginMixin} from '@/common/js/mixin'
+import { loginMixin } from '@/common/js/mixin'
 // import LoginDialog from '@/base/LoginDialog'
 import ReplyList from '@/base/ReplyList'
 export default {
@@ -57,14 +65,16 @@ export default {
     this.getDetail(this.$route.params.id)
   },
   computed: {
-    ...mapGetters(['topicId'])
+    ...mapGetters(['topicId']) // loginMixin有userInfo
   },
   data() {
     return {
       topic: {},
       iconShow: true,
       touch: [],
-      content: 'hello'
+      content: 'hello',
+      alertSucessShow: false,
+      alertErrorShow: false
     }
   },
   filters: {
@@ -82,24 +92,28 @@ export default {
       getTopicDetail(id).then(res => {
         if (res.success) {
           this.topic = this.$_normailzeTopic(res.data)
+          console.log(this.topic)
         }
       })
     },
-    listTouchStart(e) {
-      const touch = e.touches[0]
-      this.touch.startY = touch.clientY
-    },
-    listTouchMove(e) {
-      const touch = e.touches[0]
-      const deltaY = touch.clientY - this.touch.startY
-      if (deltaY > 5) { // 设置一个阀值
-        this.iconShow = true
-      } else if (deltaY < -5) {
-        this.iconShow = false
+    postIsCollect() {
+      // this.topic.isCollect = !this.topic.isCollect
+      if (!this.topic.isCollect) {
+        postCollect(this.userInfo.token, this.topic.id).then(res => {
+          if (res.success) {
+            this.topic.isCollect = !this.topic.isCollect
+          }
+        })
+      } else {
+        postDeCollect(this.userInfo.token, this.topic.id).then(res => {
+          if (res.success) {
+            this.topic.isCollect = !this.topic.isCollect
+          }
+        })
       }
     },
     replyPerson() {
-
+      console.log('hello')
     },
     replyTopic() {
       if (this.isLogin) {
@@ -108,7 +122,7 @@ export default {
         //     this.pushReply()
         //   }
         // })
-        this.pushReply()
+        this.sendError()
       } else {
         this.showDialog = true
       }
@@ -123,6 +137,32 @@ export default {
         authorName: this.userInfo.name,
         createTime: time
       })
+    },
+    sendSucess() {
+      this.alertSucessShow = true
+      setTimeout(() => {
+        this.alertSucessShow = false
+      }, 1000)
+    },
+    sendError() {
+      this.alertErrorShow = true
+      setTimeout(() => {
+        this.alertErrorShow = false
+      }, 1000)
+    },
+    listTouchStart(e) {
+      const touch = e.touches[0]
+      this.touch.startY = touch.clientY
+    },
+    listTouchMove(e) {
+      const touch = e.touches[0]
+      const deltaY = touch.clientY - this.touch.startY
+      if (deltaY > 5) {
+        // 设置一个阀值
+        this.iconShow = true
+      } else if (deltaY < -5) {
+        this.iconShow = false
+      }
     },
     $_normailzeTopic(data) {
       let ret = Object.assign(
@@ -217,6 +257,12 @@ export default {
           font-size: 10px
           color: #666
 
+.alert
+  position: fixed
+  top: 40px
+  left: 0
+  right: 0
+  width: 100%
 .markdown-body 
   box-sizing: border-box;
   min-width: 200px;

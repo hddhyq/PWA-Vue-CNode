@@ -22,10 +22,14 @@
             </div>
           </div>
           <div class="ups">
-            <span class="ups-number">({{item.upsNumber}})</span>
-            <v-icon color="grey lighten-2">thumb_up</v-icon>
-            <v-icon v-show="false">thumb_up</v-icon>
-            <v-icon large color="grey lighten-2">reply</v-icon>
+            <span @click="postIsUps(item)">
+              <span class="ups-number">({{item.upsNumber}})</span>
+              <v-icon v-if="item.isUped">thumb_up</v-icon>
+              <v-icon color="grey lighten-2" v-else>thumb_up</v-icon>
+            </span>
+            <span @click="toReply(item)">
+              <v-icon large color="grey lighten-2">reply</v-icon>
+            </span>
           </div>
         </div>
         <div class="markdown-body" v-html="item.content"></div>
@@ -36,13 +40,40 @@
 </template>
 <script type="text/ecmascript-6">
 import { timeFromNow } from '@/common/js/utils'
+import { mapGetters } from 'vuex'
+import { postUps } from '@/api/index'
 
 export default {
   name: 'ReplyList',
+  computed: {
+    ...mapGetters(['userInfo'])
+  },
   props: {
     replies: {
       type: Array,
       default: () => []
+    }
+  },
+  methods: {
+    postIsUps(item) {
+      if (item.isUped === false) {
+        postUps(this.userInfo.token, item.id).then((res) => {
+          if (res.success) {
+            item.isUped = !item.isUped
+            item.upsNumber += 1
+          }
+        })
+      } else {
+        postUps(this.userInfo.token, item.id).then((res) => {
+          if (res.success) {
+            item.isUped = !item.isUped
+            item.upsNumber -= 1
+          }
+        })
+      }
+    },
+    toReply(item) {
+      this.$emit('reply', item)
     }
   },
   filters: {

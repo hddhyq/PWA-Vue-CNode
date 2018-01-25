@@ -106,3 +106,25 @@ export function chooseTabName(tab) {
 
   return tabName
 }
+
+export function getTab(topicName) {
+  let tabName = ''
+  switch (topicName) {
+    case '分享':
+      tabName = 'share'
+      break
+    case '问答':
+      tabName = 'ask'
+      break
+    case '测试':
+      tabName = 'dev'
+      break
+    case '招聘':
+      tabName = 'job'
+      break
+    default:
+      tabName = 'dev'
+  }
+
+  return tabName
+}
