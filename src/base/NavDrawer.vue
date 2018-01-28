@@ -39,13 +39,17 @@
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
+    <login-dialog :dialog="showDialog" @hasClick="hideDialog"></login-dialog>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import { mapGetters, mapMutations } from 'vuex'
+import { loginMixin } from '@/common/js/mixin'
+
 export default {
   name: 'NavDrawer',
+  mixins: [loginMixin],
   computed: {
     ...mapGetters(['userInfo'])
   },
@@ -85,15 +89,18 @@ export default {
       ],
       personInfo: [
         {
-          title: '我的消息',
-          icon: 'message'
-        },
-        {
-          title: '我的收藏',
+          title: '个人中心',
+          page: 'user',
           icon: 'stars'
         },
         {
+          title: '我的消息',
+          page: 'message',
+          icon: 'message'
+        },
+        {
           title: '关于',
+          page: 'about',
           icon: 'info'
         }
       ]
@@ -107,6 +114,12 @@ export default {
           tab: item.tab
         }
       })
+    },
+    selectPage(item) {
+      if (item.page !== 'about') {
+
+      }
+      this.$router.push(`/${item.page}`)
     },
     goLogin() {
       this.$router.push('/login')

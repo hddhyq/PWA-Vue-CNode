@@ -4,6 +4,9 @@ import ListView from '@/components/ListView'
 import TopicDetail from '@/components/TopicDetail'
 import Login from '@/components/Login'
 import NewTopic from '@/components/NewTopic'
+import About from '@/components/About'
+import MyMessage from '@/components/MyMessage'
+import UserInfo from '@/components/UserInfo'
 
 Vue.use(Router)
 
@@ -33,6 +36,21 @@ export default new Router({
       path: '/new',
       name: 'new',
       component: NewTopic
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: About
+    },
+    {
+      path: '/message',
+      name: 'message',
+      component: MyMessage
+    },
+    {
+      path: '/user/:name',
+      name: 'user',
+      component: UserInfo
     }
   ]
 })

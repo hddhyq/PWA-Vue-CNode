@@ -56,20 +56,24 @@ export default {
   },
   methods: {
     postIsUps(item) {
-      if (item.isUped === false) {
-        postUps(this.userInfo.token, item.id).then((res) => {
-          if (res.success) {
-            item.isUped = !item.isUped
-            item.upsNumber += 1
-          }
-        })
+      if (this.userInfo.token) {
+        if (item.isUped === false) {
+          postUps(this.userInfo.token, item.id).then((res) => {
+            if (res.success) {
+              item.isUped = !item.isUped
+              item.upsNumber += 1
+            }
+          })
+        } else {
+          postUps(this.userInfo.token, item.id).then((res) => {
+            if (res.success) {
+              item.isUped = !item.isUped
+              item.upsNumber -= 1
+            }
+          })
+        }
       } else {
-        postUps(this.userInfo.token, item.id).then((res) => {
-          if (res.success) {
-            item.isUped = !item.isUped
-            item.upsNumber -= 1
-          }
-        })
+        this.$emit('hasNotLogin')
       }
     },
     toReply(item) {

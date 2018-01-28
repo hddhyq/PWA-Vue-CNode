@@ -38,13 +38,17 @@ import { getTab } from '@/api/index'
 import { timeFromNow } from '@/common/js/utils'
 import TopicText from '@/base/TopicText'
 import Loading from '@/base/Loading/Loading'
-import {loginMixin} from '@/common/js/mixin'
+import { loginMixin } from '@/common/js/mixin'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ListView',
   mixins: [loginMixin],
   created() {
     this.getTabData(this.tab) // 获取路由的query 来刷新页面
+  },
+  computed: {
+    ...mapGetters(['userInfo'])
   },
   mounted() {
     window.addEventListener('scroll', this.onScroll)
@@ -119,14 +123,16 @@ export default {
     listTouchMove(e) {
       const touch = e.touches[0]
       const deltaY = touch.clientY - this.touch.startY
-      if (deltaY > 5) { // 设置一个阀值
+      if (deltaY > 5) {
+        // 设置一个阀值
         this.iconShow = true
       } else if (deltaY < -5) {
         this.iconShow = false
       }
     },
     newReply() {
-      if (this.isLogin) {
+      if (this.userInfo.token) {
+        console.log(this.isLogin)
         this.$router.push('/new')
       } else {
         this.showDialog = true

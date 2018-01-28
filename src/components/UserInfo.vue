@@ -1,12 +1,11 @@
 <template>
   <div>
-    我的消息
+    我的收藏
   </div>
 </template>
 <script type="text/ecmascript-6">
-import {} from '@/api/index'
 export default {
-  name: 'MyMessage'
+  name: 'User'
 }
 </script>
 <style lang="stylus" scoped>

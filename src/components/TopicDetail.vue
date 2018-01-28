@@ -40,7 +40,7 @@
     <div v-html="topic.content" class="markdown-body"></div>
     <v-divider></v-divider>
     <div>
-      <reply-list :replies="topic.replies" @reply="replyPerson"></reply-list>
+      <reply-list :replies="topic.replies" @reply="replyPerson" @hasNotLogin="showDialog = true"></reply-list>
     </div>
     <v-fab-transition>
       <v-btn color="blue" dark fixed bottom right fab v-show="iconShow" transition="scale" @click="replyTopic">
@@ -78,7 +78,7 @@ export default {
     this.getDetail(this.$route.params.id)
   },
   computed: {
-    ...mapGetters(['topicId']) // loginMixin有userInfo
+    ...mapGetters(['topicId', 'userInfo']) // loginMixin有userInfo
   },
   data() {
     return {
@@ -114,22 +114,26 @@ export default {
     },
     postIsCollect() {
       // this.topic.isCollect = !this.topic.isCollect
-      if (!this.topic.isCollect) {
-        postCollect(this.userInfo.token, this.topic.id).then(res => {
-          if (res.success) {
-            this.topic.isCollect = !this.topic.isCollect
-          }
-        })
+      if (this.userInfo.token) {
+        if (!this.topic.isCollect) {
+          postCollect(this.userInfo.token, this.topic.id).then(res => {
+            if (res.success) {
+              this.topic.isCollect = !this.topic.isCollect
+            }
+          })
+        } else {
+          postDeCollect(this.userInfo.token, this.topic.id).then(res => {
+            if (res.success) {
+              this.topic.isCollect = !this.topic.isCollect
+            }
+          })
+        }
       } else {
-        postDeCollect(this.userInfo.token, this.topic.id).then(res => {
-          if (res.success) {
-            this.topic.isCollect = !this.topic.isCollect
-          }
-        })
+        this.showDialog = true
       }
     },
     replyPerson(item) {
-      if (this.isLogin) {
+      if (this.userInfo.token) {
         this.content = `@${item.authorName} `
         this.replyId = item.id
         this.sheet = !this.sheet
@@ -138,7 +142,7 @@ export default {
       }
     },
     replyTopic() {
-      if (this.isLogin) {
+      if (this.userInfo.token) {
         this.sheet = !this.sheet
       } else {
         this.showDialog = true
