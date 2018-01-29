@@ -9,6 +9,9 @@ const mutations = {
   },
   [types.SET_DRAWER](state, drawer) {
     state.drawer = drawer
+  },
+  [types.SET_MSG_COUNT](state, count) {
+    state.msgCount = count
   }
 }
 

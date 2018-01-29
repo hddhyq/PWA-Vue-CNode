@@ -37,21 +37,30 @@
         <v-list-tile-content>
           <v-list-tile-title>{{ item.title }}</v-list-tile-title>
         </v-list-tile-content>
+        <v-list-tile-action v-show="item.action">
+          <v-list-tile-action-text v-show="msgCount">{{ msgCount }}</v-list-tile-action-text>
+        </v-list-tile-action>
       </v-list-tile>
     </v-list>
-    <login-dialog :dialog="showDialog" @hasClick="hideDialog"></login-dialog>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import { mapGetters, mapMutations } from 'vuex'
-import { loginMixin } from '@/common/js/mixin'
+import { getMsgCount } from '@/api/index'
 
 export default {
   name: 'NavDrawer',
-  mixins: [loginMixin],
+  created() {
+    getMsgCount(this.userInfo.token).then((res) => {
+      if (res.success) {
+        this.setMsgCount(res.data)
+      }
+    })
+    // this.setMsgCount(99999)
+  },
   computed: {
-    ...mapGetters(['userInfo'])
+    ...mapGetters(['userInfo', 'msgCount'])
   },
   data() {
     return {
@@ -91,11 +100,12 @@ export default {
         {
           title: '个人中心',
           page: 'user',
-          icon: 'stars'
+          icon: 'account_circle'
         },
         {
           title: '我的消息',
           page: 'message',
+          action: true,
           icon: 'message'
         },
         {
@@ -116,10 +126,15 @@ export default {
       })
     },
     selectPage(item) {
-      if (item.page !== 'about') {
-
+      if (item.page !== 'about' && !this.userInfo.token) {
+        this.$router.push('/login')
+      } else {
+        if (item.page === 'user') {
+          this.$router.push(`/user/${this.userInfo.name}`)
+        } else {
+          this.$router.push(`/${item.page}`)
+        }
       }
-      this.$router.push(`/${item.page}`)
     },
     goLogin() {
       this.$router.push('/login')
@@ -127,9 +142,11 @@ export default {
     loginOut() {
       this.setUserInfo({})
       window.localStorage.removeItem('user')
+      this.setMsgCount(0)
     },
     ...mapMutations({
-      setUserInfo: 'SET_USER_INFO'
+      setUserInfo: 'SET_USER_INFO',
+      setMsgCount: 'SET_MSG_COUNT'
     })
   }
 }

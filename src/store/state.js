@@ -13,7 +13,8 @@ function loadUserInfo() {
 const state = {
   userInfo: loadUserInfo() || {},
   topicId: '',
-  drawer: false
+  drawer: false,
+  msgCount: 0
 }
 
 export default state

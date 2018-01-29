@@ -89,7 +89,6 @@ export default {
       alertSucessShow: false,
       alertErrorShow: false,
       sheet: false,
-      replyText: '',
       replyId: ''
     }
   },
@@ -203,7 +202,7 @@ export default {
       }
     },
     $_normailzeTopic(data) {
-      let ret = Object.assign(
+      let obj = Object.assign(
         {},
         {
           avatar: data.author.avatar_url,
@@ -219,7 +218,7 @@ export default {
           replies: this.$_normalizereplies(data) || []
         }
       )
-      return ret
+      return obj
     },
     $_normalizereplies(data) {
       let ret = []
