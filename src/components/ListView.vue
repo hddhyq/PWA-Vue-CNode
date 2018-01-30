@@ -3,7 +3,7 @@
                         @touchmove.passive="listTouchMove">
   <v-list two-line ref="scrollList" @onscroll="onScroll">
     <template v-for="(item, index) in postList">
-      <v-list-tile avatar ripple :key="item.id" @click="toTopic(item)">
+      <v-list-tile avatar ripple :key="item.createdTime" @click="toTopic(item)">
         <v-list-tile-avatar tile class="list-avatar">
           <img v-lazy="item.avatar">
         </v-list-tile-avatar>
@@ -81,6 +81,7 @@ export default {
       getTab(tab).then(res => {
         if (res.success) {
           this.postList = this.$_normalizePosts(res.data)
+          console.log(res.data)
         }
       })
     },
@@ -150,7 +151,8 @@ export default {
           replyCount: item.reply_count,
           visitCount: item.visit_count,
           lastReply: item.last_reply_at,
-          id: item.id
+          id: item.id,
+          createdTime: item.create_at
         })
       })
       return ret
@@ -163,10 +165,6 @@ export default {
   beforeRouteUpdate(to, from, next) {
     this.postList = []
     this.getTabData(to.query.tab)
-    next()
-  },
-  beforeRouteLeave(to, from, next) {
-    from.meta.scrollHeight = this.offsetTop
     next()
   }
 }

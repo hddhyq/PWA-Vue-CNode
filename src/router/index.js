@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import ListView from '@/components/ListView'
-import TopicDetail from '@/components/TopicDetail'
-import Login from '@/components/Login'
-import NewTopic from '@/components/NewTopic'
-import About from '@/components/About'
-import MyMessage from '@/components/MyMessage'
-import UserInfo from '@/components/UserInfo'
 
 Vue.use(Router)
+
+const ListView = () => import('@/components/ListView')
+const TopicDetail = () => import('@/components/TopicDetail')
+const Login = () => import('@/components/Login')
+const NewTopic = () => import('@/components/NewTopic')
+const About = () => import('@/components/About')
+const MyMessage = () => import('@/components/MyMessage')
+const UserInfo = () => import('@/components/UserInfo')
 
 export default new Router({
   mode: 'history',

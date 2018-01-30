@@ -79,6 +79,34 @@ export function getTabInfo(tab, good, top, isClass) {
   return isClass ? className : str
 }
 
+export function chooseTitleName(name) {
+  let titleName = ''
+  switch (name) {
+    case 'topic':
+      titleName = '主题详情'
+      break
+    case 'login':
+      titleName = '登录'
+      break
+    case 'new':
+      titleName = '新建主题'
+      break
+    case 'about':
+      titleName = '关于'
+      break
+    case 'message':
+      titleName = '我的消息'
+      break
+    case 'user':
+      titleName = '个人中心'
+      break
+    default:
+      titleName = 'CNode社区'
+  }
+
+  return titleName
+}
+
 export function chooseTabName(tab) {
   let tabName = ''
   switch (tab) {

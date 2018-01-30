@@ -118,6 +118,9 @@ export default {
   },
   methods: {
     selectTab(item) {
+      if (item.tab === this.$route.query.tab) {
+        this.$emit('closeDrawer')
+      }
       this.$router.push({
         path: '/list',
         query: {
@@ -126,6 +129,9 @@ export default {
       })
     },
     selectPage(item) {
+      if (item.page === this.$route.name) {
+        this.$emit('closeDrawer')
+      }
       if (item.page !== 'about' && !this.userInfo.token) {
         this.$router.push('/login')
       } else {

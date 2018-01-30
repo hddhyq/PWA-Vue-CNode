@@ -25,7 +25,9 @@
         </v-tabs-bar>
         <v-tabs-items>
           <v-tabs-content v-for="tab in tabs" :key="tab" :id="tab">
-            haha
+            <user-info-list v-if="tab === '最近回复'" :infoList="replyList"></user-info-list>
+            <user-info-list v-else-if="tab === '最近发布'" :infoList="topicList"></user-info-list>
+            <user-info-list v-else :infoList="starsList"></user-info-list>
           </v-tabs-content>
         </v-tabs-items>
       </v-tabs>
@@ -33,20 +35,14 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import {getUserDetail, getTopicCollect} from '@/api/index'
-import {formatDate} from '@/common/js/utils'
+import { getUserDetail, getTopicCollect } from '@/api/index'
+import { formatDate } from '@/common/js/utils'
+import UserInfoList from '@/base/UserInfoList'
 
 export default {
   name: 'UserInfo',
   created() {
-    getUserDetail(this.$route.params.name).then((res) => {
-      if (res.success) {
-        this.headerInfo = this.$_normalizeHeader(res.data)
-      }
-    })
-    getTopicCollect(this.$route.params.name).then((res) => {
-      console.log(res)
-    })
+    this.getUserData(this.$route.params.name)
   },
   data() {
     return {
@@ -65,16 +61,34 @@ export default {
     }
   },
   methods: {
+    getUserData(UserName) {
+      getUserDetail(UserName).then(res => {
+        if (res.success) {
+          this.headerInfo = this.$_normalizeHeader(res.data)
+          this.replyList = this.$_normalizeList(res.data.recent_replies)
+          this.topicList = this.$_normalizeList(res.data.recent_topics)
+        }
+      })
+      getTopicCollect(this.$route.params.name).then(res => {
+        if (res.success) {
+          this.starsList = this.$_normalizeList(res.data)
+          console.log(res)
+        }
+      })
+    },
     $_normalizeList(list) {
       let ret = []
       list.forEach(i => {
         ret.push({
           LastTime: i.last_reply_at,
           avatar: i.author.avatar_url,
-          name: i.author.name,
-          title: i.title
+          name: i.author.loginname,
+          title: i.title,
+          id: i.id
         })
       })
+
+      return ret
     },
     $_normalizeHeader(data) {
       let obj = Object.assign(
@@ -82,13 +96,27 @@ export default {
         {
           avatar: data.avatar_url,
           createdTime: data.create_at,
-          git: `<a href="//github.com/${data.githubUsername}">${data.githubUsername}@github.com</a>`,
+          git: `<a href="//github.com/${data.githubUsername}">${
+            data.githubUsername
+          }@github.com</a>`,
           name: data.loginname,
           score: data.score
         }
       )
+
       return obj
     }
+  },
+  components: {
+    UserInfoList
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.starsList = []
+    this.replyList = []
+    this.topicList = []
+    this.headerInfo = {}
+    this.getUserData(to.params.name)
+    next()
   }
 }
 </script>
