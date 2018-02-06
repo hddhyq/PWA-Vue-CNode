@@ -101,7 +101,7 @@ export function chooseTitleName(name) {
       titleName = '个人中心'
       break
     default:
-      titleName = 'CNode社区'
+      titleName = ''
   }
 
   return titleName

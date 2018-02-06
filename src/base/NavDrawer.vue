@@ -52,12 +52,13 @@ import { getMsgCount } from '@/api/index'
 export default {
   name: 'NavDrawer',
   created() {
-    getMsgCount(this.userInfo.token).then((res) => {
-      if (res.success) {
-        this.setMsgCount(res.data)
-      }
-    })
-    // this.setMsgCount(99999)
+    if (this.userInfo.token) {
+      getMsgCount(this.userInfo.token).then(res => {
+        if (res.success) {
+          this.setMsgCount(res.data)
+        }
+      })
+    }
   },
   computed: {
     ...mapGetters(['userInfo', 'msgCount'])
