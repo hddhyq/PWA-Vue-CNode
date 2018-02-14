@@ -110,13 +110,24 @@ export default {
   components: {
     UserInfoList
   },
-  beforeRouteUpdate(to, from, next) {
-    this.starsList = []
-    this.replyList = []
-    this.topicList = []
-    this.headerInfo = {}
-    this.getUserData(to.params.name)
-    next()
+  // beforeRouteUpdate(to, from, next) {
+  //   this.starsList = []
+  //   this.replyList = []
+  //   this.topicList = []
+  //   this.headerInfo = {}
+  //   this.getUserData(to.params.name)
+  //   next()
+  // }
+  watch: {
+    $route(to, from) {
+      if (to.name === 'user' && to.params.name !== this.headerInfo.name) {
+        this.starsList = []
+        this.replyList = []
+        this.topicList = []
+        this.headerInfo = {}
+        this.getUserData(to.params.name)
+      }
+    }
   }
 }
 </script>
