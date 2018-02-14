@@ -42,7 +42,7 @@ export default {
       return titleName
     },
     isTopic() {
-      if (this.$route.name === 'login' || this.$route.name === 'topic' || this.$route.name === 'new') {
+      if (this.$route.name === 'login' || this.$route.name === 'topic' || this.$route.name === 'new' || this.$route.name === 'user') {
         return true
       } else {
         return false

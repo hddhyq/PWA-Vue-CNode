@@ -5,7 +5,7 @@
     </div>
     <v-divider></v-divider>
     <div class="reply-list" v-for="(item, index) in replies" :key="item.id">
-      <div class="reply-avatar">
+      <div class="reply-avatar" @click="toUser(item.authorName)">
         <v-avatar size="36px" tile>
           <img :src="item.avatar">
         </v-avatar>
@@ -55,6 +55,9 @@ export default {
     }
   },
   methods: {
+    toUser(name) {
+      this.$router.push(`/user/${name}`)
+    },
     postIsUps(item) {
       if (this.userInfo.token) {
         if (item.isUped === false) {

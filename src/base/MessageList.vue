@@ -4,7 +4,7 @@
       <div class="msg-container">
         <div class="msg-header">
           <div class="header-left">
-            <div class="msg-avatar">
+            <div class="msg-avatar" @click="toUser(item.name)">
               <v-avatar>
                 <img v-lazy="item.avatar">
               </v-avatar>
@@ -42,6 +42,9 @@ export default {
     }
   },
   methods: {
+    toUser(name) {
+      this.$router.push(`/user/${name}`)
+    },
     goDetail(item, index) {
       this.$router.push(`/topic/${item.topicId}`)
       if (item.hasRead) {

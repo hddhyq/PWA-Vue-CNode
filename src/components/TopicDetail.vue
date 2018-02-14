@@ -14,7 +14,7 @@
     <div class="author">
       <div class="author-info">
         <div class="author-info-left">
-          <div class="author-avatar">
+          <div class="author-avatar" @click="toUser(topic.authorName)">
             <v-avatar>
               <img v-lazy="topic.avatar">
             </v-avatar>
@@ -103,6 +103,9 @@ export default {
     }
   },
   methods: {
+    toUser(name) {
+      this.$router.push(`/user/${name}`)
+    },
     getDetail(id) {
       getTopicDetail(id).then(res => {
         if (res.success) {

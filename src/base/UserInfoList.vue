@@ -3,7 +3,7 @@
     <div v-for="item in infoList" :key="item.createdTime" @click="goDetail(item)">
       <div class="info-wrapper">
         <div class="info-avatar-content">
-          <v-avatar>
+          <v-avatar @click="toUser(item.name)">
             <img v-lazy="item.avatar">
           </v-avatar>
           <div class="info-content">
@@ -35,6 +35,9 @@ export default {
     }
   },
   methods: {
+    toUser(name) {
+      this.$router.push(`/user/${name}`)
+    },
     goDetail(item) {
       this.$router.push(`/topic/${item.id}`)
     }
