@@ -2,7 +2,7 @@
   <div id="app">
     <v-app light>
       <!-- 侧栏sideBar -->
-      <v-navigation-drawer fixed app touchless disable-resize-watcher v-model="drawer">
+      <v-navigation-drawer fixed app touchless mobile-break-point="10000" v-model="drawer">
         <nav-drawer @closeDrawer="close"></nav-drawer>
       </v-navigation-drawer>
       <v-toolbar app dense fixed color="primary" dark>

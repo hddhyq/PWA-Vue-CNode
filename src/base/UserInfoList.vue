@@ -52,6 +52,7 @@ export default {
     justify-content: space-between
     .info-avatar-content
       display: flex
+      width: calc(100% - 50px)
       .info-content
         margin-left: 15px
         .info-title
