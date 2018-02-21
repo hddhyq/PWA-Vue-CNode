@@ -13,13 +13,13 @@
         <v-toolbar-title>{{titleName}}</v-toolbar-title>
       </v-toolbar>
       <!-- 内容路由区 -->
-      <!-- <v-content> -->
-      <div class="view-container">
+      <v-content>
         <keep-alive>
           <router-view>
+            <v-container fluid></v-container>
           </router-view>
         </keep-alive>
-      </div>
+      </v-content>
     </v-app>
   </div>
 </template>
@@ -70,11 +70,4 @@ export default {
 
 <style lang="stylus">
 @import '~vuetify/src/stylus/main'
-
-.view-container
-  position: relative
-  margin-top: 48px
-  height: 100%
-  width: 100%
-  // overflow: hidden
 </style>
