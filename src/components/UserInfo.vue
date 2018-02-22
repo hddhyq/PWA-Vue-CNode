@@ -72,7 +72,6 @@ export default {
       getTopicCollect(this.$route.params.name).then(res => {
         if (res.success) {
           this.starsList = this.$_normalizeList(res.data)
-          console.log(res)
         }
       })
     },

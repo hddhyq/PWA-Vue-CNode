@@ -34,7 +34,7 @@
                     :subfield="false"/>
    </div>
    <div class="button-send">
-     <v-btn color="blue" dark @click="postNewTopic">发送</v-btn>
+     <v-btn color="blue" dark @click="postNewTopic">提交</v-btn>
    </div>
  </div>
 </template>

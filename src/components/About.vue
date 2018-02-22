@@ -21,21 +21,21 @@
       <v-list-tile>
         <v-list-tile-content>
           <v-list-tile-title>cNode社区</v-list-tile-title>
-          <v-list-tile-sub-title><a href="//cnodejs.org">https://cnodejs.org</a></v-list-tile-sub-title></v-list-tile-sub-title>
+          <v-list-tile-sub-title><a href="//cnodejs.org">https://cnodejs.org</a></v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
       <v-divider></v-divider>
       <v-list-tile>
         <v-list-tile-content>
           <v-list-tile-title>意见反馈</v-list-tile-title>
-          <v-list-tile-sub-title><a href="//github.com/hddhyq/PWA-Vue-CNode/issues">反馈地址</a></v-list-tile-sub-title></v-list-tile-sub-title>
+          <v-list-tile-sub-title><a href="//github.com/hddhyq/PWA-Vue-CNode/issues">反馈地址</a></v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
       <v-divider></v-divider>
       <v-list-tile>
         <v-list-tile-content>
           <v-list-tile-title>作者</v-list-tile-title>
-          <v-list-tile-sub-title><a href="//github.com/hddhyq">hddhyq</a></v-list-tile-sub-title></v-list-tile-sub-title>
+          <v-list-tile-sub-title><a href="//github.com/hddhyq">hddhyq</a></v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
       <v-divider></v-divider>

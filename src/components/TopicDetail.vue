@@ -110,7 +110,6 @@ export default {
       getTopicDetail(id).then(res => {
         if (res.success) {
           this.topic = this.$_normailzeTopic(res.data)
-          // console.log(this.topic)
         }
       })
     },
@@ -250,10 +249,8 @@ export default {
     $route(to, from) {
       // 理解一下to＝＝要去的路由
       // this.topic = []
-      // console.log(to)
       if (to.name === 'topic' && to.params.id !== this.topicId) {
         this.topic = {}
-        // console.log('我们不一样')
         this.getDetail(this.$route.params.id)
         if (from.name === 'topic') {
           this.setTopicId(from.params.id)

@@ -47,7 +47,7 @@ export default {
     },
     goDetail(item, index) {
       this.$router.push(`/topic/${item.topicId}`)
-      if (item.hasRead) {
+      if (!item.hasRead) {
         this.$emit('firstRead', item, index)
       }
     }

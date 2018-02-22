@@ -81,7 +81,6 @@ export default {
       getTab(tab).then(res => {
         if (res.success) {
           this.postList = this.$_normalizePosts(res.data)
-          console.log(res.data)
         }
       })
     },
@@ -93,14 +92,12 @@ export default {
     onScroll() {
       if (this.$route.name === 'list') {
         // 根据路由判断是否执行相关操作。全部都是为了返回原页面的状态。
-        // console.log(window.scrollY)
         let offsetTop = window.scrollY
         const wrapperHeight = window.innerHeight - 48
         let scrollHeight = this.$refs.scrollList.$el.clientHeight
         let height = scrollHeight - offsetTop
         if (wrapperHeight >= height) {
           this.loadMore()
-          console.log('loadMore')
         }
       }
     },
@@ -112,8 +109,6 @@ export default {
           ret.forEach(i => {
             this.postList.push(i)
           })
-          console.log(this.postList)
-          // console.log(this.$_normalizePosts(res.data))
         }
       })
     },
@@ -133,7 +128,6 @@ export default {
     },
     newReply() {
       if (this.userInfo.token) {
-        console.log(this.isLogin)
         this.$router.push('/new')
       } else {
         this.showDialog = true
