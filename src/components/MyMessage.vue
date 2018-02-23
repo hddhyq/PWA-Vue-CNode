@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     readMessage(item, index) {
-      postMarkOne(item.id)
+      postMarkOne(item.id, this.userInfo.token)
       this.hasNotReadMsgs.splice(index, 1)
       this.hasReadMsgs.unshift(item)
     },
